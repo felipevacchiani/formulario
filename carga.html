@@ -55,19 +55,22 @@
         }
     </style>
     <script>
-        let identificadorContadores = { "Laboral": 1, "ART": 1, "Penal": 1, "Familia/Divorcio": 1, "Jubilaciones": 1 };
-        let prefijos = { "Laboral": "L", "ART": "A", "Penal": "P", "Familia/Divorcio": "F", "Jubilaciones": "J" };
-        
+        function generarIdentificador() {
+            const prefijos = { "Laboral": "L", "ART": "A", "Penal": "P", "Familia/Divorcio": "F", "Jubilaciones": "J" };
+            const tipoConsulta = document.getElementById("tipoConsulta").value;
+            if (tipoConsulta) {
+                let timestamp = Date.now();
+                document.getElementById("identificador").value = prefijos[tipoConsulta] + timestamp;
+            }
+        }
+
         function actualizarFormulario() {
             document.getElementById("laboralOpciones").classList.add("hidden");
             document.getElementById("artOpciones").classList.add("hidden");
             document.getElementById("derivacionOpciones").classList.add("hidden");
-
-            let tipoConsulta = document.getElementById("tipoConsulta").value;
-            if (tipoConsulta) {
-                document.getElementById("identificador").value = prefijos[tipoConsulta] + identificadorContadores[tipoConsulta];
-                identificadorContadores[tipoConsulta]++;
-            }
+            
+            const tipoConsulta = document.getElementById("tipoConsulta").value;
+            generarIdentificador();
 
             if (tipoConsulta === "Laboral") {
                 document.getElementById("laboralOpciones").classList.remove("hidden");
@@ -83,7 +86,7 @@
     <div class="container">
         <h2>Formulario de Consulta</h2>
         <form action="https://script.google.com/macros/s/AKfycbyeymwR5AEFbFMXDenpqBBFrsjHP5GbalV2XNai78k_IqhqyPlDoHjfNPMHFzUzVdL6/exec" method="POST">
-            <label>Identificador: <input type="text" id="identificador" name="identificador" readonly></label>
+            <input type="hidden" id="identificador" name="identificador">
             <label>Nombre: <input type="text" name="nombre" required></label>
             <label>Apellido: <input type="text" name="apellido" required></label>
             <label>Fecha de contacto: <input type="date" name="fechaContacto" required></label>
@@ -98,8 +101,51 @@
                     <option value="Jubilaciones">Jubilaciones</option>
                 </select>
             </label>
+            
+            <div id="laboralOpciones" class="hidden">
+                <label>¿Tiene acuerdo?
+                    <select name="tieneAcuerdo" onchange="this.value === 'Sí' ? document.getElementById('fechaAcuerdo').classList.remove('hidden') : document.getElementById('fechaAcuerdo').classList.add('hidden')">
+                        <option value="">Seleccione...</option>
+                        <option value="Sí">Sí</option>
+                        <option value="No">No</option>
+                    </select>
+                </label>
+                <label id="fechaAcuerdo" class="hidden">Fecha de acuerdo: <input type="date" name="fechaAcuerdo"></label>
+            </div>
+            
+            <div id="artOpciones" class="hidden">
+                <label>Tipo de ART:
+                    <select name="tipoART">
+                        <option value="">Seleccione...</option>
+                        <option value="No aceptado">No aceptado</option>
+                        <option value="Enfermedad">Enfermedad</option>
+                        <option value="Accidente">Accidente</option>
+                    </select>
+                </label>
+                <label>¿Tiene alta?
+                    <select name="tieneAlta" onchange="this.value === 'Sí' ? document.getElementById('fechaAlta').classList.remove('hidden') : document.getElementById('fechaAlta').classList.add('hidden')">
+                        <option value="">Seleccione...</option>
+                        <option value="Sí">Sí</option>
+                        <option value="No">No</option>
+                    </select>
+                </label>
+                <label id="fechaAlta" class="hidden">Fecha de alta: <input type="date" name="fechaAlta"></label>
+            </div>
+            
+            <div id="derivacionOpciones" class="hidden">
+                <label>¿Derivo?
+                    <select name="derivacion">
+                        <option value="">Seleccione...</option>
+                        <option value="Sofía">Sofía</option>
+                        <option value="Micaela">Micaela</option>
+                        <option value="Gabriela">Gabriela</option>
+                    </select>
+                </label>
+            </div>
+            
             <button type="submit">Enviar</button>
         </form>
     </div>
 </body>
 </html>
+
