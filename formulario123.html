@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Consulta</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: auto;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #28a745;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+    <script>
+        let identificadorContadores = { "Laboral": 1, "ART": 1, "Penal": 1, "Familia/Divorcio": 1, "Jubilaciones": 1 };
+        let prefijos = { "Laboral": "L", "ART": "A", "Penal": "P", "Familia/Divorcio": "F", "Jubilaciones": "J" };
+        
+        function actualizarFormulario() {
+            document.getElementById("laboralOpciones").classList.add("hidden");
+            document.getElementById("artOpciones").classList.add("hidden");
+            document.getElementById("derivacionOpciones").classList.add("hidden");
+
+            let tipoConsulta = document.getElementById("tipoConsulta").value;
+            if (tipoConsulta) {
+                document.getElementById("identificador").value = prefijos[tipoConsulta] + identificadorContadores[tipoConsulta];
+                identificadorContadores[tipoConsulta]++;
+            }
+
+            if (tipoConsulta === "Laboral") {
+                document.getElementById("laboralOpciones").classList.remove("hidden");
+            } else if (tipoConsulta === "ART") {
+                document.getElementById("artOpciones").classList.remove("hidden");
+            } else if (["Penal", "Familia/Divorcio", "Jubilaciones"].includes(tipoConsulta)) {
+                document.getElementById("derivacionOpciones").classList.remove("hidden");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Formulario de Consulta</h2>
+        <form action="https://script.google.com/macros/s/AKfycbyeymwR5AEFbFMXDenpqBBFrsjHP5GbalV2XNai78k_IqhqyPlDoHjfNPMHFzUzVdL6/exec" method="POST">
+            <label>Identificador: <input type="text" id="identificador" name="identificador" readonly></label>
+            <label>Nombre: <input type="text" name="nombre" required></label>
+            <label>Apellido: <input type="text" name="apellido" required></label>
+            <label>Fecha de contacto: <input type="date" name="fechaContacto" required></label>
+            <label>Monto: <input type="number" name="monto" required></label>
+            <label>Tipo de consulta:
+                <select id="tipoConsulta" name="tipoConsulta" onchange="actualizarFormulario()" required>
+                    <option value="">Seleccione...</option>
+                    <option value="Laboral">Laboral</option>
+                    <option value="ART">ART</option>
+                    <option value="Penal">Penal</option>
+                    <option value="Familia/Divorcio">Familia/Divorcio</option>
+                    <option value="Jubilaciones">Jubilaciones</option>
+                </select>
+            </label>
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+</body>
+</html>
