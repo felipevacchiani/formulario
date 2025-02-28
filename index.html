@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Inicio</title>
+    <title>Listado de Registros</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,7 +13,7 @@
             text-align: center;
         }
         .container {
-            max-width: 600px;
+            max-width: 800px;
             background: white;
             padding: 20px;
             border-radius: 10px;
@@ -23,35 +23,10 @@
         h2 {
             color: #333;
         }
-        .button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            font-size: 16px;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .nuevo {
-            background: #28a745;
-        }
-        .nuevo:hover {
-            background: #218838;
-        }
-        .listado {
-            background: #007bff;
-        }
-        .listado:hover {
-            background: #0056b3;
-        }
-        .table-container {
-            margin-top: 20px;
-        }
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
             background: white;
         }
         th, td {
@@ -71,50 +46,37 @@
         }
     </style>
     <script>
-        function redirigirFormulario() {
-            window.location.href = 'https://felipevacchiani.github.io/formulario/carga.html';
-        }
-        
-        function cargarClientes() {
+        function cargarRegistros() {
             fetch('https://script.google.com/macros/s/AKfycbyeymwR5AEFbFMXDenpqBBFrsjHP5GbalV2XNai78k_IqhqyPlDoHjfNPMHFzUzVdL6/exec')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error al obtener datos');
-                    }
-                    return response.json();
-                })
                 .then(response => response.json())
                 .then(data => {
-                    let tabla = document.getElementById("tablaClientes");
-                    tabla.innerHTML = "<tr><th>Nombre</th><th>Apellido</th><th>Tipo Consulta</th><th>Monto</th><th>Editar</th></tr>";
-                    data.forEach(cliente => {
+                    let tabla = document.getElementById("tablaRegistros");
+                    tabla.innerHTML = "<tr><th>Identificador</th><th>Nombre</th><th>Apellido</th><th>Tipo Consulta</th><th>Monto</th><th>Editar</th></tr>";
+                    data.forEach(registro => {
                         let fila = `<tr>
-                            <td>${cliente.nombre}</td>
-                            <td>${cliente.apellido}</td>
-                            <td>${cliente.tipoConsulta}</td>
-                            <td>${cliente.monto}</td>
-                            <td><button class='edit-btn' onclick='editarCliente(${JSON.stringify(cliente)})'>✏️</button></td>
+                            <td>${registro.identificador}</td>
+                            <td>${registro.nombre}</td>
+                            <td>${registro.apellido}</td>
+                            <td>${registro.tipoConsulta}</td>
+                            <td>${registro.monto}</td>
+                            <td><button class='edit-btn' onclick='editarRegistro(${JSON.stringify(registro)})'>✏️</button></td>
                         </tr>`;
                         tabla.innerHTML += fila;
                     });
                 })
-                .catch(error => console.error('Error al cargar clientes:', error));
+                .catch(error => console.error('Error al cargar registros:', error));
         }
 
-        function editarCliente(cliente) {
-            let url = `editar_cliente.html?nombre=${encodeURIComponent(cliente.nombre)}&apellido=${encodeURIComponent(cliente.apellido)}&tipoConsulta=${encodeURIComponent(cliente.tipoConsulta)}&monto=${encodeURIComponent(cliente.monto)}`;
+        function editarRegistro(registro) {
+            let url = `editar_registro.html?identificador=${encodeURIComponent(registro.identificador)}&nombre=${encodeURIComponent(registro.nombre)}&apellido=${encodeURIComponent(registro.apellido)}&tipoConsulta=${encodeURIComponent(registro.tipoConsulta)}&monto=${encodeURIComponent(registro.monto)}`;
             window.location.href = url;
         }
     </script>
 </head>
-<body>
+<body onload="cargarRegistros()">
     <div class="container">
-        <h2>Bienvenido</h2>
-        <button class="button nuevo" onclick="redirigirFormulario()">Nuevo</button>
-        <button class="button listado" onclick="cargarClientes()">Listado de Clientes</button>
-        <div class="table-container">
-            <table id="tablaClientes"></table>
-        </div>
+        <h2>Listado de Registros</h2>
+        <table id="tablaRegistros"></table>
     </div>
 </body>
 </html>
