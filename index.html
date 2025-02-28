@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario de Consulta</title>
+    <title>Página de Inicio</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
             padding: 20px;
+            text-align: center;
         }
         .container {
             max-width: 600px;
@@ -20,86 +21,94 @@
             margin: auto;
         }
         h2 {
-            text-align: center;
             color: #333;
         }
-        label {
+        .button {
             display: block;
+            width: 100%;
+            padding: 10px;
             margin-top: 10px;
-            font-weight: bold;
-        }
-        input, select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background: #28a745;
-            border: none;
-            color: white;
             font-size: 16px;
-            cursor: pointer;
+            color: white;
+            border: none;
             border-radius: 5px;
-            margin-top: 20px;
+            cursor: pointer;
         }
-        button:hover {
+        .nuevo {
+            background: #28a745;
+        }
+        .nuevo:hover {
             background: #218838;
         }
-        .hidden {
-            display: none;
+        .listado {
+            background: #007bff;
+        }
+        .listado:hover {
+            background: #0056b3;
+        }
+        .table-container {
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background: #007bff;
+            color: white;
+        }
+        .edit-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #007bff;
         }
     </style>
     <script>
-        let identificadorContadores = { "Laboral": 1, "ART": 1, "Penal": 1, "Familia/Divorcio": 1, "Jubilaciones": 1 };
-        let prefijos = { "Laboral": "L", "ART": "A", "Penal": "P", "Familia/Divorcio": "F", "Jubilaciones": "J" };
+        function redirigirFormulario() {
+            window.location.href = "formulario_identificador_auto.html";
+        }
         
-        function actualizarFormulario() {
-            document.getElementById("laboralOpciones").classList.add("hidden");
-            document.getElementById("artOpciones").classList.add("hidden");
-            document.getElementById("derivacionOpciones").classList.add("hidden");
+        function cargarClientes() {
+            fetch('https://script.google.com/macros/s/AKfycbyeymwR5AEFbFMXDenpqBBFrsjHP5GbalV2XNai78k_IqhqyPlDoHjfNPMHFzUzVdL6/exec')
+                .then(response => response.json())
+                .then(data => {
+                    let tabla = document.getElementById("tablaClientes");
+                    tabla.innerHTML = "<tr><th>Nombre</th><th>Apellido</th><th>Tipo Consulta</th><th>Monto</th><th>Editar</th></tr>";
+                    data.forEach(cliente => {
+                        let fila = `<tr>
+                            <td>${cliente.nombre}</td>
+                            <td>${cliente.apellido}</td>
+                            <td>${cliente.tipoConsulta}</td>
+                            <td>${cliente.monto}</td>
+                            <td><button class='edit-btn' onclick='editarCliente(${JSON.stringify(cliente)})'>✏️</button></td>
+                        </tr>`;
+                        tabla.innerHTML += fila;
+                    });
+                })
+                .catch(error => console.error('Error al cargar clientes:', error));
+        }
 
-            let tipoConsulta = document.getElementById("tipoConsulta").value;
-            if (tipoConsulta) {
-                document.getElementById("identificador").value = prefijos[tipoConsulta] + identificadorContadores[tipoConsulta];
-                identificadorContadores[tipoConsulta]++;
-            }
-
-            if (tipoConsulta === "Laboral") {
-                document.getElementById("laboralOpciones").classList.remove("hidden");
-            } else if (tipoConsulta === "ART") {
-                document.getElementById("artOpciones").classList.remove("hidden");
-            } else if (["Penal", "Familia/Divorcio", "Jubilaciones"].includes(tipoConsulta)) {
-                document.getElementById("derivacionOpciones").classList.remove("hidden");
-            }
+        function editarCliente(cliente) {
+            let url = `editar_cliente.html?nombre=${encodeURIComponent(cliente.nombre)}&apellido=${encodeURIComponent(cliente.apellido)}&tipoConsulta=${encodeURIComponent(cliente.tipoConsulta)}&monto=${encodeURIComponent(cliente.monto)}`;
+            window.location.href = url;
         }
     </script>
 </head>
 <body>
     <div class="container">
-        <h2>Formulario de Consulta</h2>
-        <form action="https://script.google.com/macros/s/AKfycbyeymwR5AEFbFMXDenpqBBFrsjHP5GbalV2XNai78k_IqhqyPlDoHjfNPMHFzUzVdL6/exec" method="POST">
-            <label>Identificador: <input type="text" id="identificador" name="identificador" readonly></label>
-            <label>Nombre: <input type="text" name="nombre" required></label>
-            <label>Apellido: <input type="text" name="apellido" required></label>
-            <label>Fecha de contacto: <input type="date" name="fechaContacto" required></label>
-            <label>Monto: <input type="number" name="monto" required></label>
-            <label>Tipo de consulta:
-                <select id="tipoConsulta" name="tipoConsulta" onchange="actualizarFormulario()" required>
-                    <option value="">Seleccione...</option>
-                    <option value="Laboral">Laboral</option>
-                    <option value="ART">ART</option>
-                    <option value="Penal">Penal</option>
-                    <option value="Familia/Divorcio">Familia/Divorcio</option>
-                    <option value="Jubilaciones">Jubilaciones</option>
-                </select>
-            </label>
-            <button type="submit">Enviar</button>
-        </form>
+        <h2>Bienvenido</h2>
+        <button class="button nuevo" onclick="redirigirFormulario()">Nuevo</button>
+        <button class="button listado" onclick="cargarClientes()">Listado de Clientes</button>
+        <div class="table-container">
+            <table id="tablaClientes"></table>
+        </div>
     </div>
 </body>
 </html>
