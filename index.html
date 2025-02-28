@@ -72,11 +72,17 @@
     </style>
     <script>
         function redirigirFormulario() {
-            window.location.href = "formulario_identificador_auto.html";
+            window.location.href = "https://felipevacchiani.github.io/formulario/";
         }
         
         function cargarClientes() {
             fetch('https://script.google.com/macros/s/AKfycbyeymwR5AEFbFMXDenpqBBFrsjHP5GbalV2XNai78k_IqhqyPlDoHjfNPMHFzUzVdL6/exec')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error al obtener datos');
+                    }
+                    return response.json();
+                })
                 .then(response => response.json())
                 .then(data => {
                     let tabla = document.getElementById("tablaClientes");
