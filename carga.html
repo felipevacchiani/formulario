@@ -107,6 +107,18 @@
                 <label id="fechaAltaLabel" class="hidden">Fecha de alta: <input type="date" name="fechaAlta"></label>
             </div>
 
+            <!-- Opciones de Derivación -->
+            <div id="derivacionOpciones" class="hidden">
+                <label>¿Deriva a?
+                    <select name="derivacion">
+                        <option value="">Seleccione...</option>
+                        <option value="Sofía">Sofía</option>
+                        <option value="Micaela">Micaela</option>
+                        <option value="Gabriela">Gabriela</option>
+                    </select>
+                </label>
+            </div>
+
             <button type="submit" id="submitBtn">Enviar</button>
         </form>
     </div>
@@ -124,6 +136,7 @@
         function actualizarFormulario() {
             document.getElementById("laboralOpciones").classList.add("hidden");
             document.getElementById("artOpciones").classList.add("hidden");
+            document.getElementById("derivacionOpciones").classList.add("hidden");
 
             const tipoConsulta = document.getElementById("tipoConsulta").value;
             generarIdentificador();
@@ -133,7 +146,7 @@
             } else if (tipoConsulta === "ART") {
                 document.getElementById("artOpciones").classList.remove("hidden");
             } else if (["Penal", "Familia/Divorcio", "Jubilaciones"].includes(tipoConsulta)) {
-                window.location.href = `derivacion.html?tipoConsulta=${tipoConsulta}`;
+                document.getElementById("derivacionOpciones").classList.remove("hidden");
             }
         }
 
