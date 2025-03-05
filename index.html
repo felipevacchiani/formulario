@@ -4,117 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página de Inicio</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-        .container {
-            max-width: 600px;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin: auto;
-        }
-        h2 {
-            color: #333;
-        }
-        .button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            font-size: 16px;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .nuevo {
-            background: #28a745;
-        }
-        .nuevo:hover {
-            background: #218838;
-        }
-        .listado {
-            background: #007bff;
-        }
-        .listado:hover {
-            background: #0056b3;
-        }
-        .table-container {
-            margin-top: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-        }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-        th {
-            background: #007bff;
-            color: white;
-        }
-        .edit-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #007bff;
-        }
-    </style>
-    <script>
-        function redirigirFormulario() {
-            window.location.href = 'https://felipevacchiani.github.io/formulario/carga.html';
-        }
-        
-        function cargarClientes() {
-            fetch('https://script.google.com/macros/s/AKfycbyeymwR5AEFbFMXDenpqBBFrsjHP5GbalV2XNai78k_IqhqyPlDoHjfNPMHFzUzVdL6/exec')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error al obtener datos');
-                    }
-                    return response.json();
-                })
-                .then(response => response.json())
-                .then(data => {
-                    let tabla = document.getElementById("tablaClientes");
-                    tabla.innerHTML = "<tr><th>Nombre</th><th>Apellido</th><th>Tipo Consulta</th><th>Monto</th><th>Editar</th></tr>";
-                    data.forEach(cliente => {
-                        let fila = `<tr>
-                            <td>${cliente.nombre}</td>
-                            <td>${cliente.apellido}</td>
-                            <td>${cliente.tipoConsulta}</td>
-                            <td>${cliente.monto}</td>
-                            <td><button class='edit-btn' onclick='editarCliente(${JSON.stringify(cliente)})'>✏️</button></td>
-                        </tr>`;
-                        tabla.innerHTML += fila;
-                    });
-                })
-                .catch(error => console.error('Error al cargar clientes:', error));
-        }
-
-        function editarCliente(cliente) {
-            let url = `editar_cliente.html?nombre=${encodeURIComponent(cliente.nombre)}&apellido=${encodeURIComponent(cliente.apellido)}&tipoConsulta=${encodeURIComponent(cliente.tipoConsulta)}&monto=${encodeURIComponent(cliente.monto)}`;
-            window.location.href = url;
-        }
-    </script>
+    <link rel="stylesheet" href="styles.css">
+    <script src="index.js" defer></script>
 </head>
 <body>
     <div class="container">
         <h2>Bienvenido</h2>
         <button class="button nuevo" onclick="redirigirFormulario()">Nuevo</button>
-        <button class="button listado" onclick="cargarClientes()">Listado de Clientes</button>
-        <div class="table-container">
-            <table id="tablaClientes"></table>
-        </div>
+        <button class="button listado" onclick="redirigirListado()">Listado de Clientes</button>
     </div>
 </body>
 </html>
