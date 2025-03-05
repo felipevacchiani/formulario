@@ -50,9 +50,6 @@
         button:hover {
             background: #218838;
         }
-        .hidden {
-            display: none;
-        }
     </style>
 </head>
 <body>
@@ -84,7 +81,7 @@
 
             var formData = new FormData(this);
 
-            fetch("https://script.google.com/macros/s/AKfycbyeymwR5AEFbFMXDenpqBBFrsjHP5GbalV2XNai78k_IqhqyPlDoHjfNPMHFzUzVdL6/exec", {
+            fetch("https://script.google.com/macros/s/AKfycbyEvGn6nmN-L89vvOaL7b-YBv8lZaca_aCHMW7537eidUZYFk8V38twg_eOxWAezZUl/exec", {
                 method: "POST",
                 body: new URLSearchParams(formData)
             })
