@@ -50,6 +50,9 @@
         button:hover {
             background: #218838;
         }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -62,7 +65,7 @@
             <label>Fecha de contacto: <input type="date" id="fechaContacto" name="fechaContacto" required></label>
             <label>Monto: <input type="number" id="monto" name="monto" required></label>
             <label>Tipo de consulta:
-                <select id="tipoConsulta" name="tipoConsulta" required>
+                <select id="tipoConsulta" name="tipoConsulta" onchange="actualizarFormulario()" required>
                     <option value="">Seleccione...</option>
                     <option value="Laboral">Laboral</option>
                     <option value="ART">ART</option>
@@ -71,11 +74,77 @@
                     <option value="Jubilaciones">Jubilaciones</option>
                 </select>
             </label>
-            <button type="submit">Enviar</button>
+
+            <!-- Opciones Laboral -->
+            <div id="laboralOpciones" class="hidden">
+                <label>¿Tiene acuerdo?
+                    <select id="tieneAcuerdo" name="tieneAcuerdo" onchange="toggleFechaAcuerdo()">
+                        <option value="">Seleccione...</option>
+                        <option value="Sí">Sí</option>
+                        <option value="No">No</option>
+                    </select>
+                </label>
+                <label id="fechaAcuerdoLabel" class="hidden">Fecha de acuerdo: <input type="date" name="fechaAcuerdo"></label>
+            </div>
+
+            <!-- Opciones ART -->
+            <div id="artOpciones" class="hidden">
+                <label>Tipo de ART:
+                    <select name="tipoART">
+                        <option value="">Seleccione...</option>
+                        <option value="No aceptado">No aceptado</option>
+                        <option value="Enfermedad">Enfermedad</option>
+                        <option value="Accidente">Accidente</option>
+                    </select>
+                </label>
+                <label>¿Tiene alta?
+                    <select id="tieneAlta" name="tieneAlta" onchange="toggleFechaAlta()">
+                        <option value="">Seleccione...</option>
+                        <option value="Sí">Sí</option>
+                        <option value="No">No</option>
+                    </select>
+                </label>
+                <label id="fechaAltaLabel" class="hidden">Fecha de alta: <input type="date" name="fechaAlta"></label>
+            </div>
+
+            <button type="submit" id="submitBtn">Enviar</button>
         </form>
     </div>
 
     <script>
+        function generarIdentificador() {
+            const prefijos = { "Laboral": "L", "ART": "A", "Penal": "P", "Familia/Divorcio": "F", "Jubilaciones": "J" };
+            const tipoConsulta = document.getElementById("tipoConsulta").value;
+            if (tipoConsulta) {
+                let timestamp = Date.now();
+                document.getElementById("identificador").value = prefijos[tipoConsulta] + timestamp;
+            }
+        }
+
+        function actualizarFormulario() {
+            document.getElementById("laboralOpciones").classList.add("hidden");
+            document.getElementById("artOpciones").classList.add("hidden");
+
+            const tipoConsulta = document.getElementById("tipoConsulta").value;
+            generarIdentificador();
+
+            if (tipoConsulta === "Laboral") {
+                document.getElementById("laboralOpciones").classList.remove("hidden");
+            } else if (tipoConsulta === "ART") {
+                document.getElementById("artOpciones").classList.remove("hidden");
+            } else if (["Penal", "Familia/Divorcio", "Jubilaciones"].includes(tipoConsulta)) {
+                window.location.href = `derivacion.html?tipoConsulta=${tipoConsulta}`;
+            }
+        }
+
+        function toggleFechaAcuerdo() {
+            document.getElementById("fechaAcuerdoLabel").classList.toggle("hidden", document.getElementById("tieneAcuerdo").value !== "Sí");
+        }
+
+        function toggleFechaAlta() {
+            document.getElementById("fechaAltaLabel").classList.toggle("hidden", document.getElementById("tieneAlta").value !== "Sí");
+        }
+
         document.getElementById("formularioCarga").addEventListener("submit", function(event) {
             event.preventDefault();
 
