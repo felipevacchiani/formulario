@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Registro</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="guardar_registro.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Editar Registro</h2>
+        <form id="formEditar">
+            <input type="hidden" id="identificador" name="identificador">
+            <label>Nombre: <input type="text" id="nombre" name="nombre" required></label>
+            <label>Apellido: <input type="text" id="apellido" name="apellido" required></label>
+            <label>Fecha de contacto: <input type="date" id="fechadecontacto" name="fechadecontacto" required></label>
+            <label>Monto: <input type="number" id="monto" name="monto" required></label>
+            <label>Tipo de consulta:
+                <select id="tipodeconsulta" name="tipodeconsulta" required>
+                    <option value="Laboral">Laboral</option>
+                    <option value="ART">ART</option>
+                    <option value="Penal">Penal</option>
+                    <option value="Familia/Divorcio">Familia/Divorcio</option>
+                    <option value="Jubilaciones">Jubilaciones</option>
+                </select>
+            </label>
+            <button type="submit">Guardar Cambios</button>
+        </form>
+    </div>
+</body>
+</html>
