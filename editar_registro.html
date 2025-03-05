@@ -10,20 +10,33 @@
 <body>
     <div class="container">
         <h2>Listado de Registros</h2>
-        <table id="tablaRegistros">
-            <thead>
-                <tr>
-                    <th>Identificador</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Fecha de Contacto</th>
-                    <th>Monto</th>
-                    <th>Tipo Consulta</th>
-                    <th>Editar</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+
+        <!-- Botón Volver -->
+        <button id="btnVolver" onclick="window.location.href='https://felipevacchiani.github.io/formulario'">← Volver</button>
+
+        <div class="table-container">
+            <table id="tablaRegistros">
+                <thead>
+                    <tr>
+                        <th>Identificador</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Fecha de Contacto</th>
+                        <th>Monto</th>
+                        <th>Tipo Consulta</th>
+                        <th>Editar</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <!-- Controles de paginación -->
+        <div class="pagination">
+            <button id="prevPage">◀ Anterior</button>
+            <span id="pageInfo"></span>
+            <button id="nextPage">Siguiente ▶</button>
+        </div>
     </div>
 </body>
 </html>
