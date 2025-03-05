@@ -9,11 +9,12 @@ function cargarRegistros() {
 
             data.forEach(registro => {
                 let fila = `<tr>
-                    <td>${registro.identificador}</td>
-                    <td>${registro.nombre}</td>
-                    <td>${registro.apellido}</td>
-                    <td>${registro.tipoConsulta}</td>
-                    <td>${registro.monto}</td>
+                    <td>${registro.identificador || '-'}</td>
+                    <td>${registro.nombre || '-'}</td>
+                    <td>${registro.apellido || '-'}</td>
+                    <td>${registro.fechadecontacto || '-'}</td>
+                    <td>${registro.monto || '-'}</td>
+                    <td>${registro.tipodeconsulta || '-'}</td>
                     <td><button class='edit-btn' onclick='editarRegistro(${JSON.stringify(registro)})'>✏️</button></td>
                 </tr>`;
                 tbody.innerHTML += fila;
@@ -23,6 +24,6 @@ function cargarRegistros() {
 }
 
 function editarRegistro(registro) {
-    let url = `editar_registro.html?identificador=${encodeURIComponent(registro.identificador)}&nombre=${encodeURIComponent(registro.nombre)}&apellido=${encodeURIComponent(registro.apellido)}&tipoConsulta=${encodeURIComponent(registro.tipoConsulta)}&monto=${encodeURIComponent(registro.monto)}`;
+    let url = `editar_registro.html?identificador=${encodeURIComponent(registro.identificador)}&nombre=${encodeURIComponent(registro.nombre)}&apellido=${encodeURIComponent(registro.apellido)}&fechadecontacto=${encodeURIComponent(registro.fechadecontacto)}&monto=${encodeURIComponent(registro.monto)}&tipodeconsulta=${encodeURIComponent(registro.tipodeconsulta)}`;
     window.location.href = url;
 }
