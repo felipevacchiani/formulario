@@ -15,7 +15,7 @@ function cargarRegistros() {
                     <td>${registro.fechadecontacto || '-'}</td>
                     <td>${registro.monto || '-'}</td>
                     <td>${registro.tipodeconsulta || '-'}</td>
-                    <td><button class='edit-btn' onclick='editarRegistro(${JSON.stringify(registro)})'>✏️</button></td>
+                    <td><button class='edit-btn' onclick='abrirModal(${JSON.stringify(registro)})'>✏️</button></td>
                 </tr>`;
                 tbody.innerHTML += fila;
             });
@@ -23,7 +23,17 @@ function cargarRegistros() {
         .catch(error => console.error('Error al cargar registros:', error));
 }
 
-function editarRegistro(registro) {
-    let url = `editar_registro.html?identificador=${encodeURIComponent(registro.identificador)}&nombre=${encodeURIComponent(registro.nombre)}&apellido=${encodeURIComponent(registro.apellido)}&fechadecontacto=${encodeURIComponent(registro.fechadecontacto)}&monto=${encodeURIComponent(registro.monto)}&tipodeconsulta=${encodeURIComponent(registro.tipodeconsulta)}`;
-    window.location.href = url;
+function abrirModal(registro) {
+    document.getElementById("identificador").value = registro.identificador;
+    document.getElementById("nombre").value = registro.nombre;
+    document.getElementById("apellido").value = registro.apellido;
+    document.getElementById("fechadecontacto").value = registro.fechadecontacto;
+    document.getElementById("monto").value = registro.monto;
+    document.getElementById("tipodeconsulta").value = registro.tipodeconsulta;
+
+    document.getElementById("modalEditar").style.display = "block";
+}
+
+function cerrarModal() {
+    document.getElementById("modalEditar").style.display = "none";
 }
